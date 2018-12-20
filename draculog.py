@@ -26,7 +26,6 @@ Created on Wed Dec 19 17:03:40 2018
 import time
 import serial
 import sys
-import glob
 import argparse
 import random
 import string
@@ -58,18 +57,8 @@ def plotter(arr):
     plt.close
 
 
-
-COMPORT='COM4'
-
-# configure the serial connections (the parameters differs on the device you are connecting to)
-ser = serial.Serial(
-    port=COMPORT,
-    baudrate=9600,
-    parity=serial.PARITY_ODD,
-    stopbits=serial.STOPBITS_TWO,
-    bytesize=serial.EIGHTBITS
-)
-
+    
+    
 print(''' 
 Welcome to
                                                                                         
@@ -99,6 +88,14 @@ Welcome to
                                 
  ''')
 
+COMPORT='COM4'
+ser = serial.Serial(
+    port=COMPORT,
+    baudrate=9600,
+    parity=serial.PARITY_ODD,
+    stopbits=serial.STOPBITS_TWO,
+    bytesize=serial.EIGHTBITS
+)
 
 if ser.isOpen() == True:
     print('Welcome. Connection with port ' + COMPORT + ' established.')
@@ -114,7 +111,6 @@ ser.write(b'CONF:CURR\r\n')
 
 i=0
 arr=[]
-
 timestr = time.strftime("-%Y%m%d_%H%M%S")
 sleeptime=args.sleeptime
 while True:
@@ -122,7 +118,7 @@ while True:
         ser.write(b'READ?\r\n')
         time.sleep(sleeptime)
         c=ser.readline().decode('utf-8').split(',')
-        c=[float(read) for read in c]# read line and convert byte object to utf-8 encoded string
+        c=[float(read) for read in c]
         if i==0:
             i+=1
             t0=c[1]
